@@ -74,6 +74,16 @@ models, materials and textures, and a skybox provides the environment.
 - The font is the builtin `LegacyRuntime`, which replaces the old builtin `Arial.ttf` name removed in Unity 6.
 - Saved the canvas as a prefab at `Assets/Prefabs/TimerCanvas.prefab`, and left the instance in the scene so the clock reads `0:00.00` from the moment the level loads.
 
+### 8. Clock's ticking
+- Added `Assets/Scripts/Timer.cs` to the `Player` GameObject and pointed its `timerText` field at the `TimerText` label from task 7, so the clock drives the same text that is already on screen.
+- The component ships **disabled**, so the clock does not start counting while the player is still standing on the start platform. It is armed by leaving the start line instead.
+- The clock counts up in hundredths and formats them as `m:ss.ff`, working in whole hundredths of a second so the seconds field can never round up to `60` and wrap onto the minute.
+- The elapsed total is accumulated in place rather than read from a frame clock, so the time survives the falling up respawn from task 6.
+- Added `Assets/Scripts/TimerTrigger.cs` on a cube GameObject named `TimerTrigger` at `(0, 1.25, 0)`, straddling the spawn point so the player starts inside it.
+- The cube is flattened with scale `(0, 2, 0)` into a zero-thickness plane across the start line, and its Mesh Renderer is disabled so it is never drawn.
+- Its Box Collider is set to `Is Trigger: Yes`. This is what makes `OnTriggerExit` fire at all: a solid collider there would simply block the player on the spawn platform, and the clock would never start.
+- `OnTriggerExit` enables the player's `Timer` the first time the player walks out through the line, and a `hasStarted` flag means walking back over the start line can neither reset nor re-trigger the clock.
+
 ## Credits
 
 - Models: [Kenney's Nature Pack Extended](https://kenney.nl/assets/nature-pack-extended)
