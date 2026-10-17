@@ -970,6 +970,7 @@ GameObject:
   - component: {fileID: 666123436}
   - component: {fileID: 666123435}
   - component: {fileID: 666123434}
+  - component: {fileID: 666123438}
   m_Layer: 0
   m_Name: WinFlag
   m_TagString: Untagged
@@ -1072,6 +1073,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &666123438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 666123433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca3051425a03a084b99a42892dd271d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WinTrigger
+  player: {fileID: 2117159465}
 --- !u!1 &823732570
 GameObject:
   m_ObjectHideFlags: 0

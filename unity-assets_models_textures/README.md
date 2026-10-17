@@ -84,6 +84,11 @@ models, materials and textures, and a skybox provides the environment.
 - Its Box Collider is set to `Is Trigger: Yes`. This is what makes `OnTriggerExit` fire at all: a solid collider there would simply block the player on the spawn platform, and the clock would never start.
 - `OnTriggerExit` enables the player's `Timer` the first time the player walks out through the line, and a `hasStarted` flag means walking back over the start line can neither reset nor re-trigger the clock.
 
+### 9. Finish line
+- Added `Assets/Scripts/WinTrigger.cs` and attached it to the `WinFlag` GameObject, with its `player` field assigned to the `Player` GameObject.
+- When the player enters the flag's trigger, the clock stops, the label grows from font size `48` to `60`, and the text turns green.
+- Only the first entry into the flag counts. A `hasWon` flag stops later entries from restyling the label or stopping the clock again.
+
 ## Credits
 
 - Models: [Kenney's Nature Pack Extended](https://kenney.nl/assets/nature-pack-extended)
