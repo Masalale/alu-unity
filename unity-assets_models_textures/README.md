@@ -21,6 +21,14 @@ models, materials and textures, and a skybox provides the environment.
 - Position: `(0, 1.25, 0)`, Rotation: `(0, 0, 0)`, Scale: `(1, 1, 1)`.
 - Saved `Player` as a prefab at `Assets/Prefabs/Player.prefab`.
 
+### 1. Primitive prototype
+- Created an empty GameObject named `Platforms` at position `(0, 0, 0)` to hold the level layout.
+- Added 10 floating cube platforms, named `Platform01` to `Platform10`, all parented to `Platforms`.
+- `Platform01` sits directly under the `Player` at `(0, -0.5, 0)` with scale `(5, 1, 5)` and acts as the starting platform.
+- Every platform uses a different position and a different size, from `2x1x2` stepping stones to `5x1x5` wide landing pads.
+- Consecutive gaps are 1.0 to 1.5 units with 1.0 unit rises, giving a clear jumpable path from the player to `Platform08`.
+- `Platform09` and `Platform10` are optional dead-end branches off `Platform04` and `Platform07`.
+
 ## Credits
 
 - Models: [Kenney's Nature Pack Extended](https://kenney.nl/assets/nature-pack-extended)
