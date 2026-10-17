@@ -49,6 +49,14 @@ models, materials and textures, and a skybox provides the environment.
 - Scale stays `(1, 1, 1)`; only the position and rotation were changed.
 - This is the resting position the follow camera starts from, so the level reads correctly before the player moves.
 
+### 5. Steady cam
+- Added `Assets/Scripts/CameraController.cs` and attached it to the `Main Camera` GameObject.
+- Its `player` field is assigned to the `Player` GameObject, so the camera knows which object to track.
+- The camera follows the player smoothly instead of snapping, damping towards the target position over roughly `0.15` seconds, which keeps the motion comfortable while jumping between platforms.
+- Holding the right mouse button and dragging rotates the view: mouse X changes the yaw the player is followed from, mouse Y changes the pitch, which is clamped between `-40` and `40` degrees.
+- The camera starts from the `(0, 2.5, -6.25)` position and 9 degree tilt authored in task 4 rather than snapping level on the first frame.
+- The camera offset is applied around that pivot, so rotating the view orbits the camera around the player instead of only turning in place.
+
 ## Credits
 
 - Models: [Kenney's Nature Pack Extended](https://kenney.nl/assets/nature-pack-extended)
