@@ -89,6 +89,12 @@ models, materials and textures, and a skybox provides the environment.
 - When the player enters the flag's trigger, the clock stops, the label grows from font size `48` to `60`, and the text turns green.
 - Only the first entry into the flag counts. A `hasWon` flag stops later entries from restyling the label or stopping the clock again.
 
+### 10. The sky's the limit
+- Imported the Farland Skies Cloudy Crown skyboxes into `Assets/Materials/Skyboxes/`, keeping the original `.meta` files so the GUIDs and texture references survive.
+- Set `CloudyCrown_01_Midday/CloudyCrown_Midday.mat` as the skybox in the Render Settings of `Level01`.
+- The material uses the `Skybox/6 Sided` shader with six face textures, so the sky surrounds the level in every direction.
+- The evening, midnight, sunset and daybreak variants are imported alongside it, ready to swap in.
+
 ## Credits
 
 - Models: [Kenney's Nature Pack Extended](https://kenney.nl/assets/nature-pack-extended)
