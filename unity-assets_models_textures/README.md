@@ -116,6 +116,12 @@ models, materials and textures, and a skybox provides the environment.
 - The pole stands on the top of `Platform08` at the flag position. The flag is scaled to a four unit pole and aligned by the base of its post, so the post sits on the axis of the trigger.
 - The flag model has no colliders, so it never blocks the trigger.
 
+### 14. (Sea)horse race
+- Imported the flag texture `Flag.png` into `Assets/Textures/` as a repeating 2D texture.
+- Created `Assets/Materials/Flag.mat` with the same built-in Standard shader as the Kenney materials, with the texture as its albedo and a white colour.
+- The flag cloth in `Level01` uses `Flag.mat`, and the pole uses the existing `Wood.mat`. Both are overrides on the flag instance, so the scene file stores them.
+- The flag model has no embedded materials, so nothing needed remapping.
+
 ## Credits
 
 - Models: [Kenney's Nature Pack Extended](https://kenney.nl/assets/nature-pack-extended)
