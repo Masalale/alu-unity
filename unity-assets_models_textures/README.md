@@ -36,6 +36,13 @@ models, materials and textures, and a skybox provides the environment.
 - The Capsule Collider on `WinFlag` is a trigger: Is Trigger `Yes`, Radius `0.7`, Height `6`, Direction `1` (Y axis).
 - The 6 unit tall trigger spans `y = 0` to `y = 6` on the end platform, so it registers when the player reaches the flag.
 
+### 3. Jump man
+- Added `Assets/Scripts/PlayerController.cs` and attached it to the `Player` GameObject, so the capsule now takes input.
+- Movement uses the `WASD` keys on the horizontal plane: `A` and `D` strafe, `W` and `S` walk forward and back, and the diagonals are normalised so walking sideways is not faster than walking straight.
+- `Space` jumps, using a jump height and a gravity value that give a comfortable arc across the 1.0 unit gaps between platforms.
+- Added a Character Controller to `Player` with Height `2`, Radius `0.5` and Center `(0, 0, 0)`, matching the capsule mesh. The script moves the player with it and reads from it whether the player is grounded, which is what allows jumping.
+- The player also respawns at the start platform if it falls out of the level, so a missed jump never ends the run.
+
 ## Credits
 
 - Models: [Kenney's Nature Pack Extended](https://kenney.nl/assets/nature-pack-extended)
