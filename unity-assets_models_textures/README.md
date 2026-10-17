@@ -122,6 +122,17 @@ models, materials and textures, and a skybox provides the environment.
 - The flag cloth in `Level01` uses `Flag.mat`, and the pole uses the existing `Wood.mat`. Both are overrides on the flag instance, so the scene file stores them.
 - The flag model has no embedded materials, so nothing needed remapping.
 
+### 15. Under development
+- Built `Level01` three times with `Task15Builder`, into `Builds/Windows`, `Builds/Linux` and `Builds/Mac`, each named `Platformer`.
+- The Windows and Linux builds are x86_64. The Mac build is universal, with x86_64 and ARM64 in one app.
+- All three use the Mono scripting backend, since IL2CPP cannot be cross compiled from Windows.
+- Folder layout:
+  - `Builds/Windows/`: `Platformer.exe`, `UnityPlayer.dll`, `Platformer_Data/`, plus `D3D12/`, `MonoBleedingEdge/` and `UnityCrashHandler64.exe`.
+  - `Builds/Linux/`: `Platformer.x86_64`, `Platformer_Data/`, plus `UnityPlayer.so` and the `libdecor` libraries.
+  - `Builds/Mac/`: `Platformer.app`.
+- Tested on Windows: the player starts in batch mode and the log shows no exceptions, missing script errors or null reference errors.
+- The `*_BurstDebugInformation_DoNotShip/` and `*_BackUpThisFolder_ButDontShipItWithYourGame/` folders are git ignored, so they never reach the repo.
+
 ## Credits
 
 - Models: [Kenney's Nature Pack Extended](https://kenney.nl/assets/nature-pack-extended)
