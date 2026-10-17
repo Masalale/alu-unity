@@ -57,6 +57,13 @@ models, materials and textures, and a skybox provides the environment.
 - The camera starts from the `(0, 2.5, -6.25)` position and 9 degree tilt authored in task 4 rather than snapping level on the first frame.
 - The camera offset is applied around that pivot, so rotating the view orbits the camera around the player instead of only turning in place.
 
+### 6. Falling up
+- `PlayerController` watches its world Y against a `fallThreshold` of `-10`, and once the player drops below that they have fallen out of the level.
+- Instead of ending the run, the player is dropped back in from the top of the screen: `Respawn()` teleports them to their start X and Z at `y = 10`, so they fall back down onto the start platform under `Platform01`.
+- The respawn zeroes the movement velocity before teleporting and toggles the Character Controller off and on around the move, so the drop starts as a clean fall with no leftover momentum from the failed jump.
+- An `isRespawning` flag makes the drop fire once per fall, however many frames the player spends below the threshold, and is only cleared once the player is back on solid ground.
+- The camera keeps following through the whole thing: `CameraController` never resets its `smoothVelocity`, `pivotYaw` or `pivotPitch`, so it simply damps across to the new player position and holds the look direction the player had chosen.
+
 ## Credits
 
 - Models: [Kenney's Nature Pack Extended](https://kenney.nl/assets/nature-pack-extended)
