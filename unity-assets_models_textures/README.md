@@ -110,6 +110,12 @@ models, materials and textures, and a skybox provides the environment.
 - Flowers, grass and mushrooms have no colliders, so they never block a jump.
 - Every item stays more than one unit away from the straight line between consecutive path platforms, and clear of the spawn and the flag, so the jump path is not blocked.
 
+### 13. What's left of the flag
+- Imported `Flag.fbx` into `Assets/Models/` and placed it as a child of `WinFlag`, built by `Task13Builder`.
+- The cylinder placeholder is hidden by turning off its Mesh Renderer. Its Capsule Collider (trigger, radius 0.7, height 6) and `WinTrigger` are unchanged, so the finish still works.
+- The pole stands on the top of `Platform08` at the flag position. The flag is scaled to a four unit pole and aligned by the base of its post, so the post sits on the axis of the trigger.
+- The flag model has no colliders, so it never blocks the trigger.
+
 ## Credits
 
 - Models: [Kenney's Nature Pack Extended](https://kenney.nl/assets/nature-pack-extended)
