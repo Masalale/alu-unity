@@ -29,6 +29,13 @@ models, materials and textures, and a skybox provides the environment.
 - Consecutive gaps are 1.0 to 1.5 units with 1.0 unit rises, giving a clear jumpable path from the player to `Platform08`.
 - `Platform09` and `Platform10` are optional dead-end branches off `Platform04` and `Platform07`.
 
+### 2. Pole position
+- Added a placeholder cylinder GameObject named `WinFlag` at the end point of the platform path, on top of `Platform08` at `(30, 3, 0)`.
+- `WinFlag` is a scene root and is not parented under `Platforms`, so it stays independent of the level layout.
+- Rotation is `(0, 0, 0)` and scale is `(1, 1, 1)`, the default cylinder proportions.
+- The Capsule Collider on `WinFlag` is a trigger: Is Trigger `Yes`, Radius `0.7`, Height `6`, Direction `1` (Y axis).
+- The 6 unit tall trigger spans `y = 0` to `y = 6` on the end platform, so it registers when the player reaches the flag.
+
 ## Credits
 
 - Models: [Kenney's Nature Pack Extended](https://kenney.nl/assets/nature-pack-extended)
