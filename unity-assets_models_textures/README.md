@@ -103,6 +103,13 @@ models, materials and textures, and a skybox provides the environment.
 - Each model is scaled and moved so its bounds match the cube it replaces exactly. The platform tops keep their heights, so the jump path from task 1 still works.
 - Every model mesh has a non-convex Mesh Collider, so the player stands on the real shape of the rock.
 
+### 12. Environmental awareness
+- Added an `Environment` root with `Trees`, `Rocks` and `Plants` groups, built by `Task12Builder`.
+- Placed six trees, five rocks and ten flowers, grass and mushrooms on the platform tops, scaled so the trees are about three units tall.
+- Trees and rocks sit on the edges of the wider platforms and the dead ends, and have non-convex Mesh Colliders so the player cannot walk through them.
+- Flowers, grass and mushrooms have no colliders, so they never block a jump.
+- Every item stays more than one unit away from the straight line between consecutive path platforms, and clear of the spawn and the flag, so the jump path is not blocked.
+
 ## Credits
 
 - Models: [Kenney's Nature Pack Extended](https://kenney.nl/assets/nature-pack-extended)
