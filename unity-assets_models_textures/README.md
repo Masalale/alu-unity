@@ -43,6 +43,12 @@ models, materials and textures, and a skybox provides the environment.
 - Added a Character Controller to `Player` with Height `2`, Radius `0.5` and Center `(0, 0, 0)`, matching the capsule mesh. The script moves the player with it and reads from it whether the player is grounded, which is what allows jumping.
 - The player also respawns at the start platform if it falls out of the level, so a missed jump never ends the run.
 
+### 4. Camera ready
+- Moved `Main Camera` to Position `(0, 2.5, -6.25)`, putting it 6.25 units behind the player and 2.5 units above the ground.
+- Set its Rotation to `(9, 0, 0)`, a 9 degree downward tilt that frames the player and the platforms ahead of them in one shot.
+- Scale stays `(1, 1, 1)`; only the position and rotation were changed.
+- This is the resting position the follow camera starts from, so the level reads correctly before the player moves.
+
 ## Credits
 
 - Models: [Kenney's Nature Pack Extended](https://kenney.nl/assets/nature-pack-extended)
