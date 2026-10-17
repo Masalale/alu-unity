@@ -95,6 +95,14 @@ models, materials and textures, and a skybox provides the environment.
 - The material uses the `Skybox/6 Sided` shader with six face textures, so the sky surrounds the level in every direction.
 - The evening, midnight, sunset and daybreak variants are imported alongside it, ready to swap in.
 
+### 11. The great outdoors
+- Imported all 329 Kenney Nature Pack Extended models into `Assets/Models/`, flat with no subfolders.
+- Moved the materials embedded in the models into `Assets/Materials/`, one `.mat` per unique name such as `grass.mat`, `dirt.mat` and `woodBark.mat`, 23 in total. Shared names like `grass` are one material used by every model that needs it.
+- Renamed `wood.mat` to `Wood.mat` so the flag task can refer to it.
+- Replaced each cube `Platform01` to `Platform10` with `cliff_block_rock.fbx`, a grass-topped rock block. The names and the `Platforms` parent are unchanged.
+- Each model is scaled and moved so its bounds match the cube it replaces exactly. The platform tops keep their heights, so the jump path from task 1 still works.
+- Every model mesh has a non-convex Mesh Collider, so the player stands on the real shape of the rock.
+
 ## Credits
 
 - Models: [Kenney's Nature Pack Extended](https://kenney.nl/assets/nature-pack-extended)
