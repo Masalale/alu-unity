@@ -105,8 +105,9 @@ models, materials and textures, and a skybox provides the environment.
 
 ### 12. Environmental awareness
 - Added an `Environment` root with `Trees`, `Rocks` and `Plants` groups, built by `Task12Builder`.
-- Placed six trees, five rocks and ten flowers, grass and mushrooms on the platform tops, scaled so the trees are about three units tall.
+- Placed five trees, five rocks and ten flowers, grass and mushrooms on the platform tops, scaled so the trees are about three units tall.
 - Trees and rocks sit on the edges of the wider platforms and the dead ends, and have non-convex Mesh Colliders so the player cannot walk through them.
+- Four trees and rocks are set at hand-picked spots so they stay out of the follow camera's view. The fat tree was removed from Platform08 because it was too crowded.
 - Flowers, grass and mushrooms have no colliders, so they never block a jump.
 - Every item stays more than one unit away from the straight line between consecutive path platforms, and clear of the spawn and the flag, so the jump path is not blocked.
 

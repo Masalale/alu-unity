@@ -19,6 +19,8 @@ public static class Task12Builder
     private const string TreesName = "Trees";
     private const string RocksName = "Rocks";
     private const string PlantsName = "Plants";
+    private const string WinFlagName = "WinFlag";
+    private const string FlagName = "Flag";
     private const int PlatformCount = 10;
     private const int PathPlatformCount = 8;
     private const int Seed = 12;
@@ -53,6 +55,18 @@ public static class Task12Builder
     private static readonly int[] EdgePlatforms = { 1, 3, 4, 6, 7, 8, 9, 10 };
     private static readonly int[] AllPlatforms = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 
+    // Items that stand at a hand-set spot, so they stay out of the follow camera's view.
+    private static readonly Dictionary<string, FixedSpot> FixedSpots = new Dictionary<string, FixedSpot>
+    {
+        { "tree_default_01", new FixedSpot(1, -1.6f, 1.6f) },
+        { "stone_largeB_09", new FixedSpot(1, 1.5f, 1.9f) },
+        { "tree_pineRoundA_03", new FixedSpot(8, 31.9f, 1.7f) },
+        { "rock_largeC_10", new FixedSpot(8, 31.9f, -1.9f) },
+    };
+
+    // Items taken out of the level. Their slot is kept so the other item names do not change.
+    private static readonly string[] RemovedNames = { "tree_fat_04" };
+
     public static void Build()
     {
         AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
@@ -84,15 +98,34 @@ public static class Task12Builder
             var name = slot.Model + "_" + (n + 1).ToString("00");
             var group = groups[slot.Group];
 
+            if (System.Array.IndexOf(RemovedNames, name) >= 0)
+            {
+                var stale = group.Find(name);
+                if (stale != null)
+                {
+                    Object.DestroyImmediate(stale.gameObject);
+                }
+                Debug.Log("TASK12_REMOVED " + name);
+                continue;
+            }
+
+            FixedSpot fixedSpot;
+            bool isFixed = FixedSpots.TryGetValue(name, out fixedSpot);
+
             var existing = group.Find(name);
             if (existing != null)
             {
+                if (isFixed)
+                {
+                    SeatAt(existing.gameObject, layout.Tops[fixedSpot.Platform], fixedSpot.Center);
+                }
+
                 var bounds = CombinedBounds(existing.gameObject);
                 if (IsClear(bounds, layout, placed))
                 {
                     ApplyColliders(existing.gameObject, slot);
                     placed.Add(bounds);
-                    Debug.Log("TASK12_KEPT " + name);
+                    Debug.Log((isFixed ? "TASK12_FIXED " : "TASK12_KEPT ") + name + Describe(bounds));
                     continue;
                 }
 
@@ -101,17 +134,17 @@ public static class Task12Builder
                 Object.DestroyImmediate(existing.gameObject);
             }
 
-            PlaceNew(slot, name, group, n, layout, placed, rng);
+            PlaceNew(slot, name, group, n, layout, placed, rng, isFixed ? (FixedSpot?)fixedSpot : null);
         }
 
-        VerifyClearance(groups, layout);
+        VerifyClearance(groups, layout, FlagBounds());
 
         EditorSceneManager.MarkSceneDirty(scene);
         EditorSceneManager.SaveScene(scene);
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
 
-        Debug.Log("TASK12_BUILD_OK items=" + slots.Count);
+        Debug.Log("TASK12_BUILD_OK items=" + (slots.Count - RemovedNames.Length));
     }
 
     private static Layout ReadLayout(Transform platforms)
@@ -156,7 +189,7 @@ public static class Task12Builder
     }
 
     private static void PlaceNew(Slot slot, string name, Transform group, int n, Layout layout,
-        List<Bounds> placed, System.Random rng)
+        List<Bounds> placed, System.Random rng, FixedSpot? fixedSpot)
     {
         var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(ModelsFolder + slot.Model + ".fbx");
         if (prefab == null)
@@ -173,6 +206,11 @@ public static class Task12Builder
 
         // Rotates the starting platform so that items spread over the level.
         var order = slot.EdgeOnly ? EdgePlatforms : AllPlatforms;
+        if (fixedSpot.HasValue)
+        {
+            order = new[] { fixedSpot.Value.Platform };
+        }
+
         for (int k = 0; k < order.Length; k++)
         {
             int platform = order[(n + k) % order.Length];
@@ -180,7 +218,7 @@ public static class Task12Builder
 
             for (int t = 0; t < MaxTries; t++)
             {
-                var point = RandomPoint(top, rng, slot.EdgeOnly);
+                var point = fixedSpot.HasValue ? fixedSpot.Value.Center : RandomPoint(top, rng, slot.EdgeOnly);
                 float yaw = (float)rng.NextDouble() * 360f;
                 float height = Mathf.Lerp(slot.MinHeight, slot.MaxHeight, (float)rng.NextDouble());
 
@@ -191,11 +229,7 @@ public static class Task12Builder
                 float horizontal = Mathf.Max(bounds.size.x, bounds.size.z);
                 root.localScale = baseScale * Mathf.Min(height / bounds.size.y, slot.MaxFootprint / horizontal);
 
-                bounds = CombinedBounds(instance);
-                root.position += new Vector3(
-                    point.x - bounds.center.x,
-                    top.max.y - bounds.min.y,
-                    point.y - bounds.center.z);
+                SeatAt(instance, top, point);
 
                 bounds = CombinedBounds(instance);
                 if (IsClear(bounds, layout, placed))
@@ -217,7 +251,7 @@ public static class Task12Builder
         throw new System.InvalidOperationException("TASK12_NO_SPOT: " + name);
     }
 
-    private static void VerifyClearance(Dictionary<string, Transform> groups, Layout layout)
+    private static void VerifyClearance(Dictionary<string, Transform> groups, Layout layout, Bounds flag)
     {
         var items = new List<Transform>();
         foreach (var group in groups.Values)
@@ -233,7 +267,7 @@ public static class Task12Builder
         for (int i = 0; i < items.Count; i++)
         {
             var others = bounds.Where((b, j) => j != i).ToList();
-            bool ok = IsClear(bounds[i], layout, others);
+            bool ok = IsClear(bounds[i], layout, others) && !bounds[i].Intersects(flag);
             allOk &= ok;
             Debug.Log("TASK12_CLEAR " + items[i].name + " ok=" + (ok ? "True" : "False"));
         }
@@ -351,6 +385,36 @@ public static class Task12Builder
         }
     }
 
+    // Moves the instance so its bounds sit on the top with the centre at the given XZ point.
+    private static void SeatAt(GameObject instance, Bounds top, Vector2 point)
+    {
+        var bounds = CombinedBounds(instance);
+        instance.transform.position += new Vector3(
+            point.x - bounds.center.x,
+            top.max.y - bounds.min.y,
+            point.y - bounds.center.z);
+    }
+
+    private static Bounds FlagBounds()
+    {
+        var winFlag = GameObject.Find(WinFlagName);
+        Transform flag = winFlag != null ? winFlag.transform.Find(FlagName) : null;
+        if (flag == null)
+        {
+            Debug.LogError("TASK12_FLAG_MISSING");
+            throw new System.InvalidOperationException("TASK12_FLAG_MISSING: " + WinFlagName + "/" + FlagName);
+        }
+
+        var bounds = CombinedBounds(flag.gameObject);
+        Debug.Log("TASK12_FLAG" + Describe(bounds));
+        return bounds;
+    }
+
+    private static string Describe(Bounds bounds)
+    {
+        return " min=" + bounds.min.ToString("F3") + " max=" + bounds.max.ToString("F3");
+    }
+
     private static GameObject FindOrCreateRoot(string name)
     {
         var found = GameObject.Find(name);
@@ -409,6 +473,18 @@ public static class Task12Builder
             MaxFootprint = maxFootprint;
             Solid = solid;
             EdgeOnly = edgeOnly;
+        }
+    }
+
+    private struct FixedSpot
+    {
+        public readonly int Platform;
+        public readonly Vector2 Center;
+
+        public FixedSpot(int platform, float x, float z)
+        {
+            Platform = platform;
+            Center = new Vector2(x, z);
         }
     }
 
