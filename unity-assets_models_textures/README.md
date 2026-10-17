@@ -64,6 +64,16 @@ models, materials and textures, and a skybox provides the environment.
 - An `isRespawning` flag makes the drop fire once per fall, however many frames the player spends below the threshold, and is only cleared once the player is back on solid ground.
 - The camera keeps following through the whole thing: `CameraController` never resets its `smoothVelocity`, `pivotYaw` or `pivotPitch`, so it simply damps across to the new player position and holds the look direction the player had chosen.
 
+### 7. Time trial
+- Added a screen space canvas GameObject named `TimerCanvas`, holding the run clock label. Render Mode is `Screen Space - Overlay` and Pixel Perfect is `No`.
+- Added a Canvas Scaler to `TimerCanvas` so the label stays legible at any window size: `UI Scale Mode` is `Scale With Screen Size` with a `Reference Resolution` of `1280x800`.
+- `Screen Match` is `Expand` and `Match Width Or Height` is `1` (Match Height), so the label keeps its authored pixel height and the canvas simply grows into whatever width the aspect ratio has spare.
+- Under `TimerCanvas` is a UI Text GameObject named `TimerText`, a `160x30` box anchored to the top centre of the screen and offset `(0, -40)` below the top edge.
+- The label starts at `0:00.00`, Font Size `48`, white, `Middle Center` alignment, with Horizontal Overflow `Wrap` and Vertical Overflow `Truncate` so the `m:ss.ff` reading always stays on one line.
+- Raycast Target is `No`, so the overlay never swallows a click meant for the level.
+- The font is the builtin `LegacyRuntime`, which replaces the old builtin `Arial.ttf` name removed in Unity 6.
+- Saved the canvas as a prefab at `Assets/Prefabs/TimerCanvas.prefab`, and left the instance in the scene so the clock reads `0:00.00` from the moment the level loads.
+
 ## Credits
 
 - Models: [Kenney's Nature Pack Extended](https://kenney.nl/assets/nature-pack-extended)
